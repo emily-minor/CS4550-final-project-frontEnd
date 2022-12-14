@@ -9,10 +9,15 @@ fetch(API_URL,{headers: {
   })
   .then((data) => {
     let imagesData = data;
+    <div className="image-grid col-12">
+
+    </div>
     imagesData.map(function(imageData) {
       
       let image = document.createElement('img');
       image.src = `${imageData.url}`;
+    //   image.width(100);
+    //   image.height(100);
           
       let gridCell = document.createElement('div');
       gridCell.classList.add('col');
@@ -31,7 +36,6 @@ function Homepage() {
         <div className="container">
             <div className="header row mt-3">
                 <h2 className="title col-10">Cats App</h2>
-                <button type="button" className="btn btn-primary col-1">Log In</button>
             </div>
             <div className="panels row">
                 <div className="main-panel col-8">

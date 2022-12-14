@@ -7,11 +7,13 @@ import {Routes, Route} from "react-router";
 import Login from './cats/login/login';
 import Search from './cats/search/search';
 import Details from './cats/details/details';
+import Navigation from './cats/navigation';
 
 function App() {
   return(
+    <div className="container">
     <BrowserRouter>
-      <div className="container">
+      <Navigation/>
         <Routes>
           <Route index
             element={<Homepage/>}/>
@@ -24,8 +26,8 @@ function App() {
           <Route path="/details"
             element={<Details/>}/>
         </Routes>
+      </BrowserRouter>
       </div> 
-    </BrowserRouter>
     // <div className="container">
     //   <Homepage/>
     //   <Profile/>
