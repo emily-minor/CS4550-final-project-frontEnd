@@ -1,6 +1,10 @@
 import {useAuth} from "../../contexts/context";
-import {useState} from "react";
 import {Link} from "react-router-dom";
+
+import React, { useState } from "react";
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
 
 function Login() {
     const { login } = useAuth();
@@ -19,22 +23,36 @@ function Login() {
     };
 
     return(
-        <div>
+        <div >
             <h2>Login</h2>
-            <input
-                placeholder="Username"
-                size="sm"
-                onChange={(e) => setUsername(e.target.value)}
+
+        <Box
+            className="pt-10 d-grid"
+            component="form"
+            sx={{
+            '& > :not(style)': { m: 1, width: '25ch' },
+            }}
+            noValidate
+            autoComplete="off"
+        >
+            <TextField
+            className="row"
+            id="outlined-name"
+            label="Email"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             />
-            <input
-                placeholder="Password"
-                size="sm"
-                type="password"
-                onChange={(e) => setPassword(e.target.value)}
+            <TextField
+            className="row"
+            id="outlined-name"
+            label="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            type="password"
             />
-            <button onClick={() => submit()}>
-                Login
-            </button>
+            <Button className="row" disabled={!username || !password} onClick={() => submit()} variant="contained">Log In</Button>
+        </Box>
+
             <div>
                 <text>
                     Don't have an account? Sign up{" "}
