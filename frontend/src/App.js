@@ -27,11 +27,7 @@ function App() {
             element={<Details/>}/>
         </Routes>
       </BrowserRouter>
-      </div> 
-    // <div className="container">
-    //   <Homepage/>
-    //   <Profile/>
-    // </div>
+      </div>
   )
 }
 
