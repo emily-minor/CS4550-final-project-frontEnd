@@ -1,20 +1,15 @@
 import React, { useState, useCallback } from "react";
 import { AuthContext, useAuth } from "./context";
+import {instance} from "../api";
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
-
+    console.log(process.env.REACT_APP_API_BASE)
     const login = useCallback(async (username, password) => {
         try {
-            const res = await fetch("/login", {
-                method: 'POST',
-                user: {
-                    username: username,
-                    password: password
-                }
-            });
-            setUser(res.data.result[0]);
-            localStorage.setItem("user", JSON.stringify(res.data.result[0]));
+            const res = await instance.post(process.env.REACT_APP_API_BASE+"/login", {username, password});
+            setUser(res.data);
+            localStorage.setItem("user", JSON.stringify(res.data));
             console.log(res);
         } catch (error) {
             console.log(error);

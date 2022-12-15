@@ -13,6 +13,7 @@ function Login() {
         try {
             await login(username, password);
         } catch (error) {
+            console.log(username, password);
             console.log(error);
         }
     };
@@ -31,11 +32,11 @@ function Login() {
                 type="password"
                 onChange={(e) => setPassword(e.target.value)}
             />
-            <button colorScheme="teal" size="sm" onClick={() => submit()}>
+            <button onClick={() => submit()}>
                 Login
             </button>
             <div>
-                <text fontSize="md">
+                <text>
                     Don't have an account? Sign up{" "}
                     <Link to="/register">
                         <u>here</u>
