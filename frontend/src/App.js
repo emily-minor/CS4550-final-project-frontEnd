@@ -19,11 +19,13 @@ function App() {
             element={<Homepage/>}/>
           <Route path="/profile"
             element={<Profile/>}/>
+          {/* <Route path="/profile/:uid"
+            element={<Profile/>}/> */}
           <Route path="/login"
             element={<Login/>}/>
           <Route path="/search"
             element={<Search/>}/>
-          <Route path="/details"
+          <Route path="/details/:dId"
             element={<Details/>}/>
         </Routes>
       </BrowserRouter>
