@@ -2,9 +2,18 @@ import React, { useState, useEffect } from 'react';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import Link from '@mui/material/Link';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
+import * as service from "../services/cats-app-services"
+import axios from 'axios';
 import "./styles.css"
 
-const API_URL = `https://api.thecatapi.com/v1/images/search?limit=24&size=small&has_breeds=1`;
+// /Users/carolinehughes/nu/webdev/CS4550-final-project-frontEnd/frontend/src/cats/homepage/homepage.js
+// /Users/carolinehughes/nu/webdev/CS4550-final-project-frontEnd/frontend/src/services/cats-app-services.js
+// For Cats API
+const CATS_API_URL = `https://api.thecatapi.com/v1/images/search?limit=24&size=small&has_breeds=1`;
 const API_KEY = "live_i4AlnomPIvkmpQj0FlbDiUFBnxJX6SUNuP7VNcbH1B7s19Onxn3vYzynt285VM1k"
 
 function Homepage(props) {
@@ -27,9 +36,9 @@ function Homepage(props) {
 
 
   useEffect(() => {
-    const fetchData = async () => {
-      console.log('i fire once');
-      const catsData = await fetch(API_URL,
+    const fetchCatAPIData = async () => {
+      console.log('fetching main content...');
+      const catsData = await fetch(CATS_API_URL,
         {headers: {
         'x-api-key': API_KEY
         }})
@@ -37,9 +46,18 @@ function Homepage(props) {
       setMainPanelData(json);
     }
   
-    fetchData()
-    .catch(console.error);
+    fetchCatAPIData().catch(console.error);
     }, [])
+
+    useEffect(() => {
+      const fetchActivityListData = async () => {
+        console.log('fetching activity list...');
+        const response = await axios.get("http://localhost:4000/recent");
+        setActivityList(response.data)
+      }
+    
+      fetchActivityListData().catch(console.error);
+      }, [])
 
     return(
         <div className="container">
@@ -69,7 +87,28 @@ function Homepage(props) {
 
                 </div>
                 <div className="right-panel col-md">
-                    <p>Activity List:</p>
+                  <h4 className="title col-10">
+                    Recent Activity:
+                  </h4>
+
+
+                  <Table aria-label="simple table">
+                    <TableBody>
+                      {activityList.map((user) => (
+                          
+                        <TableRow
+                          key={user._id}
+                          sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                        >
+                          <TableCell component="th" scope="row">
+                          {`@${user.username} joined on ${user.joined.substring(0, 10)}`}
+                          </TableCell>
+                        </TableRow>
+ 
+                      ))}
+                    </TableBody>
+                  </Table>
+
                 </div>
             </div>
         </div>
