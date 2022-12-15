@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
+import Link from '@mui/material/Link';
 import "./styles.css"
 
-const API_URL = `https://api.thecatapi.com/v1/images/search?limit=24&size=small`;
+const API_URL = `https://api.thecatapi.com/v1/images/search?limit=24&size=small&has_breeds=1`;
 const API_KEY = "live_i4AlnomPIvkmpQj0FlbDiUFBnxJX6SUNuP7VNcbH1B7s19Onxn3vYzynt285VM1k"
 
 function Homepage(props) {
@@ -27,6 +28,7 @@ function Homepage(props) {
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log('i fire once');
       const catsData = await fetch(API_URL,
         {headers: {
         'x-api-key': API_KEY
@@ -42,7 +44,7 @@ function Homepage(props) {
     return(
         <div className="container">
             <div className="header row mt-3">
-                <h2 className="title col-10">Cats FYP</h2>
+                <h2 className="title col-10">Cats FYP 🐱</h2>
             </div>
             <div className="panels row">
                 <div className="col-9">
@@ -52,7 +54,8 @@ function Homepage(props) {
                     }
                     <ImageList cols={3}>
                     {mainPanelData.map((pic) => (
-                      <ImageListItem key={pic.id}>
+                      <Link key={pic.id} href={`/details/${pic.id}`}>
+                      <ImageListItem >
                         <img
                           alt="a cat" 
                           src={pic.url}
@@ -60,6 +63,7 @@ function Homepage(props) {
                           width={400}
                         />
                       </ImageListItem>
+                      </Link>
                     ))}
                   </ImageList>
 
