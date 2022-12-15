@@ -1,0 +1,9 @@
+.catpic {
+  width: 200px;
+  padding: 0px;
+}
+
+.main-panel {
+  display: inline-block;
+  width: 100%;
+}
