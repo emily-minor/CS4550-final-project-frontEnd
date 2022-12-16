@@ -1,5 +1,7 @@
+import {useState} from "react";
+
 const f = document.getElementById('form');
-const q = document.getElementById('query');
+let q = document.getElementById('query');
 const google = 'https://www.google.com/search?q=site%3A+';
 const site = 'pagedart.com';
 
@@ -7,17 +9,10 @@ const site = 'pagedart.com';
 // https://pagedart.com/blog/how-to-add-a-search-bar-in-html/
 // to help create a search bar
 
-function submitted() {
-    // event.preventDefault();
-    console.log("hello")
-    // const url = google + site + '+' + q.value;
-    // const win = window.open(url, '_blank');
-    // win.focus();
-}
 
-function searchButton() {
+function searchButton(searchVal) {
     var button = document.createElement('BUTTON');
-    button.addEventListener("click", submitted());
+    button.addEventListener("click", submitted(searchVal));
     return(
         <button>
             Search
@@ -25,22 +20,31 @@ function searchButton() {
     )
 }
 
-function searchBar() {
+function Search() {
+    const [searchVal, setSearch] = useState("");
     return(
-        <form id="form" role="search">
-            <link rel="stylesheet" href="./searchBar.css"/>
+        <form id="form" role="search" method="GET" name="form">
             <h2>Search</h2>
-            <input type="search" id="query" name="" placeholder="Search up some cats :)"/>
-            {searchButton()}
-        </form>
 
+            <input
+                placeholder="Search"
+                size="sm"
+                onChange={(e) => setSearch(e.target.value)}
+            />
+
+            {searchButton(searchVal)}
+        </form>
     );
 }
 
-function Search() {
-    return(
-        searchBar()
-    );
+function submitted(searchVal) {
+    // event.preventDefault();
 
-}export default Search
+    console.log(searchVal)
+    // const a = document.getElementsByName("form");
+
+}
+
+
+export default Search
 
