@@ -1,10 +1,14 @@
 import {Link} from "react-router-dom";
+import React, { useContext } from 'react';
 import {useLocation} from "react-router";
+import {AuthContext} from "../contexts/context";
 
 const Navigation = () => {
     const {pathname} = useLocation()
     const parts = pathname.split('/')
-    console.log(parts)
+    const auth = useContext(AuthContext);
+    
+    // console.log(parts)
     return(
         <ul className="nav nav-pills">
             <li className="nav-item">
@@ -19,18 +23,22 @@ const Navigation = () => {
                     Search
                 </Link>
             </li>
-            <li className="nav-item">
-                <Link to="/profile"
-                      className={`nav-link ${parts[1] === 'profile'?'active': ''}`}>
-                    Profile
-                </Link>
-            </li>
-            <li className="nav-item float-end">
+            {auth.user ?
+                <li className="nav-item">
+                    <Link to="/profile"
+                        className={`nav-link ${parts[1] === 'profile'?'active': ''}`}>
+                            My Profile
+                    </Link>
+                </li> 
+                : ""}
+            {!auth.user ?
+                <li className="nav-item float-end">
                 <Link to="/login"
                       className={`nav-link ${parts[1] === 'login'?'active': ''}`}>
-                    Login
+                        Log in
                 </Link>
             </li>
+                : ""}
         </ul>
     )
 }
