@@ -1,10 +1,11 @@
 import {useAuth} from "../../contexts/context";
 import {useEffect, useState} from "react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {API_URL, API_KEY} from "../homepage/homepage";
 
 function Register() {
     const { register } = useAuth();
+    const navigate = useNavigate();
 
     const [breeds, setBreeds] = useState([]);
     const [username, setUsername] = useState("");
@@ -29,10 +30,9 @@ function Register() {
     const submit = async () => {
         try {
             await register({username, password, phone, email, favBreeds: Array.from(favBreeds)});
-            console.log(username, password, phone, email, favBreeds);
+            navigate("/");
         } catch (error) {
             console.log(error);
-            console.log(username, password, phone, email, favBreeds);
         }
     };
     return(

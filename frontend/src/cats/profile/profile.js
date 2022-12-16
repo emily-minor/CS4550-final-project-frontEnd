@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -12,15 +13,17 @@ const USERS_API = `${CAT_BACKEND_API_BASE}/users`;
 const NON_EDIT_FIELDS = ['admin', 'followers', 'following', 'joined']
 
 function Profile() {
-    // const [user, setCurrentUser] = useState(false);
     const [error, setError] = useState(false);
     const [infoChanged, setInfoChanged] = useState(false);
     const [fieldsToHide, setFieldsToHide] = useState([]);
     const [breeds, setBreeds] = useState([]);
 
-    const { login, user } = useAuth();
+    const { logout, login, user } = useAuth();
+    const navigate = useNavigate();
 
-    const [updatedUser, setUpdatedUser] = useState(user[0]);
+    const loggedInUser = user[0] !== undefined ? user[0] : user;
+
+    const [updatedUser, setUpdatedUser] = useState(loggedInUser);
 
     // get breeds from Cat API
     useEffect(() => {
@@ -37,12 +40,12 @@ function Profile() {
     }, [])
 
     useEffect(() => {
-        setUpdatedUser(user[0])
-        const isAdmin = user[0]['admin']
+        setUpdatedUser(loggedInUser)
+        const isAdmin = loggedInUser['admin']
         if (isAdmin) {
-            setFieldsToHide(['_id', 'followers', 'following', 'favBreeds'])
+            setFieldsToHide(['_id', 'favBreeds', '__v'])
         } else {
-            setFieldsToHide(['_id', 'admin', 'followers', 'following', 'favBreeds'])
+            setFieldsToHide(['_id', 'admin', 'joined', 'favBreeds', '__v'])
         }
     }, [user])
 
@@ -75,11 +78,9 @@ function Profile() {
     };
 
     return(
-        <div className='row pt-3'>
-        <div className='col-6'>
-        <h2>User Information:</h2>
+        <div >
+            <h2>My Profile</h2>
             {error ? <Alert severity="error">Could not save</Alert> : ''}
-        
         <Box
             className="pt-10 d-grid"
             component="form"
@@ -89,7 +90,8 @@ function Profile() {
             noValidate
             autoComplete="off"
         >
-            {Object.keys(updatedUser).map((k) => 
+            <h2>User Information:</h2>
+            {Object.keys(updatedUser).map((k) =>
             {
                 if (fieldsToHide.includes(k)) {
                     return null
@@ -99,7 +101,8 @@ function Profile() {
                     className="row"
                     id="outlined-name"
                     label={k}
-                    value={updatedUser[k]}
+                        // eslint-disable-next-line eqeqeq
+                    value={updatedUser[k] == "" ? "N/A" : updatedUser[k]}
                     disabled={NON_EDIT_FIELDS.includes(k)}
                     type={k === "password" ? "password" : ""}
                     onChange={(e) => {
@@ -110,45 +113,18 @@ function Profile() {
                 }
 
             })}
-            <Button className="row" disabled={!infoChanged} onClick={() => performUpdate()} variant="contained">Save Changes</Button>
-            </Box>
-        </div>
-        <div className='col-6'>
-        <h2>Your Favorite Breeds:</h2>
-            <ul>
-                {
-                breeds.map((breed, index) => {
-                    const favs = updatedUser.favBreeds 
-                    const fav =  favs.includes(breed.id)
-                    return <div key={index}>
-                        <input type="checkbox"
-                                key={breed.id}
-                                id={breed.id}
-                                name={breed.name}
-                                checked={fav}
-                                onChange={() =>
-                                {
-                                    if (fav) {
-                                        var index = favs.indexOf(breed.id);
-                                        if (index > -1) {
-                                          favs.splice(index, 1);
-                                        }
-                                    } else{
-                                        favs.push(breed.id)
-                                    }
-                                    console.log(favs)
-                                    onChangeField('favBreeds', favs)
-                                    setInfoChanged(true)
 
-                                }}
-                        />
-                        <label htmlFor={breed.name}>{breed.name}</label>
-                    </div>
-                }
-                    
-                    )}
-                </ul>
-            </div>
+            <h2>Your Favorite Breeds:</h2>
+            
+            <Button className="row" disabled={!infoChanged} onClick={() => performUpdate()} variant="contained">Save Changes</Button>
+        </Box>
+
+        <Button onClick={() => {
+            logout();
+            navigate("/");
+            return
+        }}>Log Out</Button>
+            
         </div>
     )
 }

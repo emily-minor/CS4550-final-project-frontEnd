@@ -31,7 +31,6 @@ function Homepage() {
 
   useEffect(() => {
     const fetchActivityListData = async () => {
-      // console.log('fetching activity list...');
       const response = await axios.get("http://localhost:4000/recent");
       setActivityList(response.data)
     }
@@ -42,12 +41,13 @@ function Homepage() {
   useEffect(() => {
     let url_to_use = API_URL + HOME_API_QUERY
     if (auth.user) {
+      const loggedInUser = auth.user[0] !== undefined ? auth.user[0] : auth.user;
       setLoggedIn(true)
-      setCurrentUser(auth.user[0])
+      setCurrentUser(loggedInUser)
 
       const fetchCatAPIData = async () => {
         console.log('fetching main content...');
-        url_to_use = url_to_use + "&breed_ids=" + auth.user[0].favBreeds.join();
+        url_to_use = url_to_use + "&breed_ids=" + loggedInUser.favBreeds.join();
         console.log('USING URL', url_to_use)
         const catsData = await fetch(url_to_use,
           {headers: {
@@ -75,7 +75,6 @@ function Homepage() {
       fetchCatAPIData().catch(console.error);
     }
   }, [auth])
-
   return(
       <div className="container">
           <div className="header row mt-3">
