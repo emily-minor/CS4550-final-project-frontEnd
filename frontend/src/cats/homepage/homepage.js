@@ -118,12 +118,10 @@ function Homepage() {
                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                       >
                         <TableCell component="th" scope="row">
-                        {/* {user.followers.includes(u.username) ? 'Your follower ' : ''}
-                        {user.following.includes(u.username) ? 'Youre following ' : ''} */}
-                        {<a href={`/profile/${u._id}`}>@{u.username}</a>} joined on {u.joined.substring(0, 10)}
+                        {loggedIn ?  <a href={`/profile/${u._id}`}>@{u.username}</a> : `@${u.username}`}
+                        {` joined on ${u.joined.substring(0, 10)}`}
                         </TableCell>
                       </TableRow>
-
                     ))}
                   </TableBody>
                 </Table>
