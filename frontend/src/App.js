@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import Homepage from './cats/homepage/homepage';
 import Profile from './cats/profile/profile';
+import OtherUserProfile from './cats/profile/otherprofile';
 import { BrowserRouter } from 'react-router-dom';
 import {Routes, Route} from "react-router";
 import Login from './cats/login/login';
@@ -20,8 +21,8 @@ function App() {
             element={<Homepage/>}/>
           <Route path="/profile"
             element={<Profile/>}/>
-          {/* <Route path="/profile/:uid"
-            element={<Profile/>}/> */}
+          <Route path="/profile/:uid"
+            element={<OtherUserProfile/>}/>
           <Route path="/login"
             element={<Login/>}/>
           <Route path="/search"
