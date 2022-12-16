@@ -17,20 +17,22 @@ const AuthProvider = ({ children }) => {
         }
     }, []);
 
-    // const register = useCallback(async (body) => {
-    //     try {
-    //         const res = await instance.post("/register", body);
-    //         const user = await instance.get(
-    //             `/users/${res.data.result.insertId}`
-    //         );
-    //         setUser(user.data.result[0]);
-    //         localStorage.setItem("user", JSON.stringify(user.data.result[0]));
-    //         console.log(user);
-    //     } catch (error) {
-    //         console.log(error);
-    //         throw error;
-    //     }
-    // }, []);
+    const register = useCallback(async (body) => {
+        const res = await instance.post(process.env.REACT_APP_API_BASE+"/register", body);
+        console.log(res.data['_id']);
+        try {
+            const user = await instance.get(
+                process.env.REACT_APP_API_BASE+`/users/${res.data['_id']}`
+            );
+            setUser(user.data);
+            localStorage.setItem("user", JSON.stringify(user.data));
+            console.log(user);
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }, []);
+
     //
     // const logout = useCallback(() => {
     //     setUser(null);
@@ -38,7 +40,7 @@ const AuthProvider = ({ children }) => {
     // }, []);
 
     return (
-        <AuthContext.Provider value={{ user, login}}>
+        <AuthContext.Provider value={{ user, login, register}}>
             {children}
         </AuthContext.Provider>
     );

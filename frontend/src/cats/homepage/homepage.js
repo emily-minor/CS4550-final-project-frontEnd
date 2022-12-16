@@ -3,8 +3,8 @@ import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import "./styles.css"
 
-const API_URL = `https://api.thecatapi.com/v1/images/search?limit=24&size=small`;
-const API_KEY = "live_i4AlnomPIvkmpQj0FlbDiUFBnxJX6SUNuP7VNcbH1B7s19Onxn3vYzynt285VM1k"
+export const API_URL = `https://api.thecatapi.com/v1`;
+export const API_KEY = "live_i4AlnomPIvkmpQj0FlbDiUFBnxJX6SUNuP7VNcbH1B7s19Onxn3vYzynt285VM1k"
 
 function Homepage(props) {
 
@@ -27,7 +27,7 @@ function Homepage(props) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const catsData = await fetch(API_URL,
+      const catsData = await fetch(API_URL+'/images/search?limit=24&size=small',
         {headers: {
         'x-api-key': API_KEY
         }})

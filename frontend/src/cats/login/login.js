@@ -36,13 +36,10 @@ function Login() {
                 Login
             </button>
             <div>
-                <text>
-                    Don't have an account? Sign up{" "}
-                    <Link to="/register">
-                        <u>here</u>
-                    </Link>{" "}
-                    !
-                </text>
+                Don't have an account? Register{" "}
+                <Link to="/register">
+                    <u>here</u>
+                </Link>!
             </div>
         </div>
     )
