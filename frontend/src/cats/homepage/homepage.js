@@ -10,8 +10,10 @@ import axios from 'axios';
 import "./styles.css"
 import {AuthContext} from "../../contexts/context";
 
-const CATS_API_URL = `https://api.thecatapi.com/v1/images/search?limit=24&size=small&has_breeds=1`;
-const API_KEY = "live_i4AlnomPIvkmpQj0FlbDiUFBnxJX6SUNuP7VNcbH1B7s19Onxn3vYzynt285VM1k"
+export const API_URL = `https://api.thecatapi.com/v1`;
+export const API_KEY = "live_i4AlnomPIvkmpQj0FlbDiUFBnxJX6SUNuP7VNcbH1B7s19Onxn3vYzynt285VM1k"
+
+const HOME_API_QUERY = `/images/search?limit=24&size=small&has_breeds=1`;
 
 function Homepage() {
   const auth = useContext(AuthContext);
@@ -38,13 +40,14 @@ function Homepage() {
   }, [])
 
   useEffect(() => {
+    let url_to_use = API_URL + HOME_API_QUERY
     if (auth.user) {
       setLoggedIn(true)
       setCurrentUser(auth.user[0])
 
       const fetchCatAPIData = async () => {
         console.log('fetching main content...');
-        let url_to_use = CATS_API_URL + "&breed_ids=" + auth.user[0].favBreeds.join();
+        url_to_use = url_to_use + "&breed_ids=" + auth.user[0].favBreeds.join();
         console.log('USING URL', url_to_use)
         const catsData = await fetch(url_to_use,
           {headers: {
@@ -61,7 +64,7 @@ function Homepage() {
 
       const fetchCatAPIData = async () => {
         console.log('fetching main content...');
-        const catsData = await fetch(CATS_API_URL,
+        const catsData = await fetch(url_to_use,
           {headers: {
           'x-api-key': API_KEY
           }})

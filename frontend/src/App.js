@@ -8,6 +8,7 @@ import Login from './cats/login/login';
 import Search from './cats/search/search';
 import Details from './cats/details/details';
 import Navigation from './cats/navigation';
+import Register from "./cats/register/register";
 
 function App() {
   return(
@@ -27,6 +28,8 @@ function App() {
             element={<Search/>}/>
           <Route path="/details/:dId"
             element={<Details/>}/>
+          <Route path="/register"
+                 element={<Register/>}/>
         </Routes>
       </BrowserRouter>
       </div>
