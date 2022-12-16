@@ -44,6 +44,7 @@ function Homepage() {
       const loggedInUser = auth.user[0] !== undefined ? auth.user[0] : auth.user;
       setLoggedIn(true)
       setCurrentUser(loggedInUser)
+      console.log(loggedInUser)
 
       const fetchCatAPIData = async () => {
         console.log('fetching main content...');
@@ -110,14 +111,16 @@ function Homepage() {
 
                 <Table aria-label="simple table">
                   <TableBody>
-                    {activityList.map((user) => (
+                    {activityList.map((u) => (
                         
                       <TableRow
-                        key={user._id}
+                        key={u._id}
                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                       >
                         <TableCell component="th" scope="row">
-                        {`@${user.username} joined on ${user.joined.substring(0, 10)}`}
+                        {/* {user.followers.includes(u.username) ? 'Your follower ' : ''}
+                        {user.following.includes(u.username) ? 'Youre following ' : ''} */}
+                        {<a href={`/profile/${u._id}`}>@{u.username}</a>} joined on {u.joined.substring(0, 10)}
                         </TableCell>
                       </TableRow>
 
