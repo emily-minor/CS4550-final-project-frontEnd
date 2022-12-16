@@ -38,7 +38,7 @@ function Homepage() {
   }, [])
 
   useEffect(() => {
-    if (auth.user.length > 0) {
+    if (auth.user) {
       setLoggedIn(true)
       setCurrentUser(auth.user[0])
 
