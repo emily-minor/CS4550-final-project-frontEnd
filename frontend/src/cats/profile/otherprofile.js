@@ -24,24 +24,35 @@ function Profile() {
 
     const [followers, setFollowers] = useState([]);
     const [following, setFollowing] = useState([]);
-    
-    const { user } = useAuth();
-    
+
+    const { user, login } = useAuth();
+    const loggedInUser = user[0] !== undefined ? user[0] : user;
+    const [updatedUser, setUpdatedUser] = useState(loggedInUser);
+    // const navigate = useNavigate();
+
+
     useEffect(() => {
       const fetchUser = async () => {
         const res = await axios.get(`${USERS_API}/${params.uid}`);
-        console.log(res.data)
         // const json = await userData.json();
         setDetails(res.data)
       }
       fetchUser().catch(console.error);
     }, [params])
 
+    useEffect(() => {
+      setUpdatedUser(loggedInUser)
+      const isAdmin = loggedInUser['admin']
+      if (isAdmin) {
+          setFieldsToHide(['_id', 'favBreeds', '__v'])
+      } else {
+          setFieldsToHide(['_id', 'admin', 'joined', 'favBreeds', '__v'])
+      }
+  }, [user])
 
     useEffect(() => {
       if (allDetails) {
         const fetchFollowers = async (username) => {
-          console.log(username)
           const res = await axios.get(`${USERS_API}/byusername/${username}`);
           console.log(res.data)
 
@@ -49,7 +60,6 @@ function Profile() {
         }
 
         const fetchFollowing = async (username) => {
-          console.log(username)
           const res = await axios.get(`${USERS_API}/byusername/${username}`);
           console.log(res.data)
 
@@ -73,13 +83,13 @@ function Profile() {
       if (k === 'followers') {
         return (
           <div>
-            {followers.map(f => <a href={`/profile/${f._id}`}>{f.username} </a>)}
+            {followers.map(f => <a key={k} href={`/profile/${f._id}`}>{f.username} </a>)}
           </div>
         );
       } else {
         return (
           <div>
-            {following.map(f => <a href={`/profile/${f._id}`}>{f.username} </a>)}
+            {following.map(f => <a key={k} href={`/profile/${f._id}`}>{f.username} </a>)}
           </div>
         );
       }
@@ -114,6 +124,37 @@ function Profile() {
       );
     }
     
+    const performUpdate = async () => {
+      console.log('the updated user=', updatedUser)
+      try {
+        const url = 'http://localhost:4000/users/' + updatedUser._id
+        console.log('url !!', url)
+        const res = await axios.put(`${USERS_API}/${updatedUser._id}`, updatedUser);
+        try {
+            const res = await login(updatedUser.username, updatedUser.password);
+            console.log('logged in!', res)
+            
+        } catch (error) {
+            console.log(error);
+            setError(true)
+        }
+      } catch (error) {
+          console.log(error);
+          setError(true)
+      }
+  };
+
+    function follow(usernameToFollow) {
+      // the curr logged in user needs to send post with update
+        setUpdatedUser(prevState => {
+          let copy = Object.assign({}, prevState); 
+          const newVal = copy.following
+          newVal.push(usernameToFollow)  
+          copy.following = newVal;                                                  
+          return copy;            
+        })
+      performUpdate()
+    }
 
  return (
         <div>
@@ -125,6 +166,7 @@ function Profile() {
                     <div className='col-6'>
                     <h2>@{allDetails.username}</h2>                    
                     <h4>joined {allDetails.joined ?? "unknown"}</h4>
+                    <Button onClick={() => follow(allDetails.username)}>Follow</Button>
                     </div>
                     <div className='col-6'>
                     <UserDataTable userData={allDetails}></UserDataTable>
