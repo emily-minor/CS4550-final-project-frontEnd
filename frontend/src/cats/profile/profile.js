@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -19,8 +18,7 @@ function Profile() {
     const [fieldsToHide, setFieldsToHide] = useState([]);
     const [breeds, setBreeds] = useState([]);
 
-    const { logout, login, user } = useAuth();
-    const navigate = useNavigate();
+    const { login, user } = useAuth();
 
     const [updatedUser, setUpdatedUser] = useState(user[0]);
 
@@ -77,9 +75,11 @@ function Profile() {
     };
 
     return(
-        <div >
-            <h2>My Profile</h2>
+        <div className='row pt-3'>
+        <div className='col-6'>
+        <h2>User Information:</h2>
             {error ? <Alert severity="error">Could not save</Alert> : ''}
+        
         <Box
             className="pt-10 d-grid"
             component="form"
@@ -89,7 +89,6 @@ function Profile() {
             noValidate
             autoComplete="off"
         >
-            <h2>User Information:</h2>
             {Object.keys(updatedUser).map((k) => 
             {
                 if (fieldsToHide.includes(k)) {
@@ -111,9 +110,12 @@ function Profile() {
                 }
 
             })}
-
-            <h2>Your Favorite Breeds:</h2>
-            {/* <ul>
+            <Button className="row" disabled={!infoChanged} onClick={() => performUpdate()} variant="contained">Save Changes</Button>
+            </Box>
+        </div>
+        <div className='col-6'>
+        <h2>Your Favorite Breeds:</h2>
+            <ul>
                 {
                 breeds.map((breed, index) => {
                     const favs = updatedUser.favBreeds 
@@ -127,17 +129,15 @@ function Profile() {
                                 onChange={() =>
                                 {
                                     if (fav) {
-                                        favs.delete(breed.id);
-                                        // setUpdatedUser((prev) => prev.favBreeds = favs)
-                                        // setNewFavBreeds(new Set(favs))
+                                        var index = favs.indexOf(breed.id);
+                                        if (index > -1) {
+                                          favs.splice(index, 1);
+                                        }
                                     } else{
-                                        favs.add(breed.id)
-                                        // setNewFavBreeds(new Set(favs))
+                                        favs.push(breed.id)
                                     }
-                                    // const oldList = newFavBreeds
-                                    // const newList = fav ? oldList.delete(breed.id) : oldList.push(breed.id);
-                                    // console.log(newList)
-                                    // setNewFavBreeds(newList)
+                                    console.log(favs)
+                                    onChangeField('favBreeds', favs)
                                     setInfoChanged(true)
 
                                 }}
@@ -147,17 +147,8 @@ function Profile() {
                 }
                     
                     )}
-                </ul> */}
-            
-            <Button className="row" disabled={!infoChanged} onClick={() => performUpdate()} variant="contained">Save Changes</Button>
-        </Box>
-
-        <Button onClick={() => {
-            logout();
-            navigate("/");
-            return
-        }}>Log Out</Button>
-            
+                </ul>
+            </div>
         </div>
     )
 }
