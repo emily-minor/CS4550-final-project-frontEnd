@@ -10,8 +10,6 @@ const API_KEY = "live_i4AlnomPIvkmpQj0FlbDiUFBnxJX6SUNuP7VNcbH1B7s19Onxn3vYzynt2
 
 function Details() {
     const params = useParams();
-    console.log(params); 
-
     const [allDetails, setDetails] = useState();
     const [allBreedInfo, setBreedInfo] = useState({});
     const [breedName, setBreedName] = useState("");
@@ -26,8 +24,6 @@ function Details() {
             setDetails(json)
             const breedinfo = json['breeds'][0]
             const breedname = json['breeds'][0]['name']
-            console.log('breed info:', breedinfo);
-            console.log('breed name:', breedname);
             setBreedInfo(breedinfo)
             setBreedName(breedname)
         }
@@ -57,6 +53,7 @@ function Details() {
                     <h4>{allBreedInfo['description'] ?? ""}</h4>
                     </div>
                     <div className='col-6'>
+                    <h2>Breed Details</h2>
                     <BasicTable breed={breedName} breedInfoObject={allBreedInfo}></BasicTable>
                     </div>
                 </div>
@@ -68,12 +65,8 @@ function Details() {
 
 function BasicTable({breed, breedInfoObject}) {
     const keyz = Object.keys(breedInfoObject).sort()
-    const v = breedInfoObject[keyz[0]]
-    console.log('v=', v)
-
     return (
       <Table aria-label="simple table">
-          <h2>Breed Details</h2>
           <TableBody>
             {keyz.map((k) => (
                 (k === 'reference_image_id' || 
